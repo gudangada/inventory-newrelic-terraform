@@ -27,9 +27,10 @@ variable "slack_webhook" {
 
 variable "alert_config" {
   type = object({
-    enabled                  = optional(bool, false)
-    incident_preference      = optional(string, "PER_POLICY")
-    newrelic_alert_policy_id = optional(string, null)
+    enabled                          = optional(bool, false)
+    incident_preference              = optional(string, "PER_POLICY")
+    newrelic_alert_policy_id         = optional(string, null)
+    newrelic_notification_channel_id = string
     config = object({
       lb = optional(
         object({
@@ -95,9 +96,10 @@ variable "alert_config" {
   })
 
   default = {
-    config                   = {}
-    incident_preference      = "PER_POLICY"
-    newrelic_alert_policy_id = null
+    config                           = {}
+    incident_preference              = "PER_POLICY"
+    newrelic_alert_policy_id         = null
+    newrelic_notification_channel_id = null
   }
 
   description = <<-EOT

@@ -21,20 +21,11 @@ module "slack" {
   }
 }
 
-# module "alert" {
-#   source = "./alert"
-
-#   context                  = module.this.context
-#   configs                  = var.alert_config.configs
-#   incident_preference      = var.alert_config.incident_preference
-#   newrelic_alert_policy_id = var.alert_config.newrelic_alert_policy_id
-# }
-
-module "inventory_api_alert" {
+module "alert" {
   source = "./alert"
 
   context                          = module.this.context
   enabled                          = var.alert_config.enabled
-  newrelic_notification_channel_id = module.slack.newrelic_notification_channel_id
   config                           = var.alert_config.config
+  newrelic_notification_channel_id = var.alert_config.newrelic_notification_channel_id == null ? module.slack.newrelic_notification_channel_id : var.alert_config.newrelic_notification_channel_id
 }
