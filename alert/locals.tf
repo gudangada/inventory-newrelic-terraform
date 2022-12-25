@@ -14,6 +14,7 @@ locals {
   template_file_vars = {
     environment    = local.environment
     product_domain = local.product_domain
+    service        = local.query_service_tags
   }
 
   occurrences_map = {
@@ -38,7 +39,7 @@ locals {
   alert_config_default = {
     for key, value in var.config :
     key => yamldecode(
-      templatefile(local.alert_config_map[key], merge(local.template_file_vars, { service = local.query_service_tags }))
+      templatefile(local.alert_config_map[key], local.template_file_vars)
     )
     if value.enabled
   }
