@@ -7,6 +7,8 @@ module "this" {
   product_domain = var.product_domain
   environment    = var.environment
   name_key_case  = var.name_key_case
+  service_name   = var.service_name
+  service_tags   = var.service_tags
 }
 
 variable "enabled" {
@@ -28,6 +30,16 @@ variable "api_key" {
 variable "product_domain" {
   type        = string
   description = "ProductDomain on AWS."
+}
+
+variable "service_name" {
+  type        = string
+  description = "Name of the service."
+}
+
+variable "service_tags" {
+  type        = list(string)
+  description = "The service tag in New Relic. Usually marked as `Label.Service`."
 }
 
 variable "environment" {

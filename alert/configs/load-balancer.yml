@@ -1,0 +1,65 @@
+load_balancer:
+  high_5xx_percentage:
+    enabled: true
+    unit: "%"
+    type: "static"
+    name: "5XX Error Percentage"
+    description: "5XX error percentage"
+    runbook_url: null
+    value_function: "single_value"
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT 100 *
+        sum(`aws.applicationelb.HTTPCode_ELB_5XX_Count`) /
+        sum(`aws.applicationelb.RequestCount.byAlb`) 
+      FROM Metric
+      WHERE
+        label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "above"
+      threshold: 3
+      threshold_duration: 300
+      threshold_occurrences: "at_least_once"
+    warning:
+      operator: "above"
+      threshold: 1
+      threshold_duration: 300
+      threshold_occurrences: "at_least_once"
+  high_4xx_percentage:
+    enabled: true
+    unit: "%"
+    type: "static"
+    name: "4XX Error Percentage"
+    description: "4XX error percentage"
+    runbook_url: null
+    value_function: "single_value"
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT 100 *
+        sum(`aws.applicationelb.HTTPCode_ELB_4XX_Count`) /
+        sum(`aws.applicationelb.RequestCount.byAlb`) 
+      FROM Metric
+      WHERE
+        label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "above"
+      threshold: 3
+      threshold_duration: 300
+      threshold_occurrences: "at_least_once"
+    warning:
+      operator: "above"
+      threshold: 1
+      threshold_duration: 300
+      threshold_occurrences: "at_least_once"

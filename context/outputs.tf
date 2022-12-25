@@ -28,9 +28,24 @@ output "environment_aliases" {
   description = "Aliases for enviroment variable."
 }
 
+output "service_name" {
+  value       = local.service_name
+  description = "Name of the service."
+}
+
+output "service_tags" {
+  value       = local.service_tags
+  description = "The service tag in New Relic. Usually marked as `Label.Service`."
+}
+
 output "normalized_name" {
   value       = local.name
   description = "Generated name for new relic resource."
+}
+
+output "normalized_service_name" {
+  value       = "${local.service_name} ${local.environment}"
+  description = "Generated service_name for new relic resource."
 }
 
 output "context" {

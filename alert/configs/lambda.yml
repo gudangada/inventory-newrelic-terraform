@@ -1,0 +1,129 @@
+lambda:
+  high_error_rate:
+    enabled: true
+    unit: "%"
+    type: "static"
+    name: "High Error Rate"
+    description: "High error rate"
+    runbook_url: null
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT
+       sum(`provider.errors.Sum`) * 100 / 
+       sum(`provider.invocations.Sum`) 
+      FROM ServerlessSample
+      WHERE
+        provider='LambdaFunction'
+        AND label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "above"
+      threshold: 5
+      threshold_duration: 300
+      threshold_occurrences: "at_least_once"
+    warning:
+      operator: "above"
+      threshold: 3
+      threshold_duration: 300
+      threshold_occurrences: "at_least_once"
+  anomaly_lambda_duration:
+    enabled: true
+    type: "baseline"
+    name: "Anomaly Lambda Duration"
+    description: "Anomaly lambda duration"
+    runbook_url: null
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    slide_by: 30
+    baseline_direction: "upper_only"
+    query: |
+      SELECT 
+        average(`provider.duration.Average`) / 1000 as 'Duration' 
+      FROM ServerlessSample
+      WHERE 
+        provider='LambdaFunction'
+        AND label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "above"
+      threshold: 5
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "above"
+      threshold: 3
+      threshold_duration: 300
+      threshold_occurrences: "all"
+  anomaly_lambda_invocation:
+    enabled: true
+    type: "baseline"
+    name: "Anomaly Lambda Invocation"
+    description: "Anomaly lambda invocation"
+    runbook_url: null
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    slide_by: 30
+    baseline_direction: "upper_only"
+    query: |
+      SELECT 
+        average(`provider.invocations.Average`) 
+      FROM ServerlessSample 
+      WHERE 
+        provider='LambdaFunction'
+        AND label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "above"
+      threshold: 5
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "above"
+      threshold: 3
+      threshold_duration: 300
+      threshold_occurrences: "all"
+  anomaly_concurrent_execution:
+    enabled: true
+    type: "baseline"
+    name: "Anomaly Lambda Concurrent Executions"
+    description: "Anomaly concurrent executions"
+    runbook_url: null
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    slide_by: 30
+    baseline_direction: "upper_only"
+    query: |
+      SELECT 
+        average(`provider.concurrentExecutions.Average`) 
+      FROM ServerlessSample 
+      WHERE 
+        provider='LambdaFunction'
+        AND label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "above"
+      threshold: 5
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "above"
+      threshold: 3
+      threshold_duration: 300
+      threshold_occurrences: "all"

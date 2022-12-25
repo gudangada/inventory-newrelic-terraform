@@ -1,0 +1,94 @@
+ec2:
+  ec2_high_cpu:
+    enabled: true
+    unit: "%"
+    type: "static"
+    name: "High CPU Utilization Percentage"
+    description: "High CPU utilization percentage"
+    runbook_url: null
+    value_function: "single_value"
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT 
+        average(host.cpuPercent)
+      FROM Metric 
+      WHERE 
+        label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "above"
+      threshold: 70
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "above"
+      threshold: 50
+      threshold_duration: 300
+      threshold_occurrences: "all"
+  ec2_high_memory:
+    enabled: true
+    unit: "%"
+    type: "static"
+    name: "High Memory Utilization Percentage"
+    description: "High memory utilization percentage"
+    runbook_url: null
+    value_function: "single_value"
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT 
+        average(host.memoryUsedPercent)
+      FROM Metric 
+      WHERE 
+        label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "above"
+      threshold: 70
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "above"
+      threshold: 50
+      threshold_duration: 300
+      threshold_occurrences: "all"
+  ec2_high_storage:
+    enabled: true
+    unit: "%"
+    type: "static"
+    name: "High Storage Utilization Percentage"
+    description: "High storage utilization percentage"
+    runbook_url: null
+    value_function: "single_value"
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT 
+        average(host.disk.usedPercent)
+      FROM Metric 
+      WHERE 
+        label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "above"
+      threshold: 70
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "above"
+      threshold: 50
+      threshold_duration: 300
+      threshold_occurrences: "all"

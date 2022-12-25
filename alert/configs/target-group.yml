@@ -1,0 +1,31 @@
+target_group:
+  low_healthy_host_count:
+    enabled: true
+    type: "static"
+    name: "Low Healthy Host Count"
+    description: "Healthy host count"
+    runbook_url: null
+    value_function: "single_value"
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT 
+        min(`aws.applicationelb.HealthyHostCount`)
+      FROM Metric
+      WHERE
+        label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "below"
+      threshold: 1
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "below"
+      threshold: 2
+      threshold_duration: 300
+      threshold_occurrences: "all"

@@ -6,6 +6,8 @@ variable "context" {
     api_key        = null
     product_domain = null
     environment    = null
+    service_name   = null
+    service_tags   = null
     name_key_case  = null
   }
   description = <<-EOT
@@ -59,6 +61,18 @@ variable "environment" {
     condition     = var.environment == null ? true : contains(["production", "staging", "development"], var.environment)
     error_message = "Allowed values: `production`, `staging`, `development`."
   }
+}
+
+variable "service_name" {
+  type        = string
+  default     = null
+  description = "Name of the service."
+}
+
+variable "service_tags" {
+  type        = list(string)
+  default     = null
+  description = "The service tag in New Relic. Usually marked as `Label.Service`."
 }
 
 variable "name_key_case" {
