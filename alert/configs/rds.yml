@@ -183,7 +183,7 @@ rds:
       threshold: 3
       threshold_duration: 300
       threshold_occurrences: "all"
-    warning: null
+    warning:
       operator: "above"
       threshold: 2
       threshold_duration: 300

@@ -2,6 +2,7 @@ locals {
   name                             = module.this.normalized_name
   service_name                     = module.this.normalized_service_name
   service_tags                     = module.this.service_tags
+  enabled                          = module.this.enabled
   api_key                          = module.this.api_key
   account_id                       = module.this.account_id
   product_domain                   = module.this.product_domain
@@ -10,10 +11,12 @@ locals {
   newrelic_notification_channel_id = var.newrelic_notification_channel_id
   query_service_tags               = "(${join(",", [for s in local.service_tags : "'${s}'"])})"
   newrelic_alert_policy_id         = var.newrelic_alert_policy_id == null ? join("", newrelic_alert_policy.this.*.id) : var.newrelic_alert_policy_id
+  count                            = local.enabled ? 1 : 0
 
   template_file_vars = {
     environment    = local.environment
     product_domain = local.product_domain
+    service        = local.query_service_tags
   }
 
   occurrences_map = {
@@ -38,7 +41,7 @@ locals {
   alert_config_default = {
     for key, value in var.config :
     key => yamldecode(
-      templatefile(local.alert_config_map[key], merge(local.template_file_vars, { service = local.query_service_tags }))
+      templatefile(local.alert_config_map[key], local.template_file_vars)
     )
     if value.enabled
   }

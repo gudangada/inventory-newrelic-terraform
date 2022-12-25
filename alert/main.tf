@@ -1,5 +1,5 @@
 resource "newrelic_alert_policy" "this" {
-  count = var.newrelic_alert_policy_id == null ? 1 : 0
+  count = local.count == 1 && var.newrelic_alert_policy_id == null ? 1 : 0
 
   name                = local.name
   incident_preference = local.incident_preference
@@ -61,6 +61,7 @@ resource "newrelic_nrql_alert_condition" "this" {
 }
 
 resource "newrelic_workflow" "this" {
+  count                 = local.count
   name                  = "Policy: ${local.newrelic_alert_policy_id} - ${local.service_name}"
   muting_rules_handling = "NOTIFY_ALL_ISSUES"
 
