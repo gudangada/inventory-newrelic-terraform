@@ -1,0 +1,63 @@
+apm:
+  p99_transaction_time:
+    enabled: true
+    unit: "second(s)"
+    type: "static"
+    name: "High P99 Transaction Time"
+    description: "P99 transaction time"
+    runbook_url: null
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT
+        percentile(duration,99) AS '99th Percentile Transaction Time (s)'
+      FROM Transaction
+      WHERE 
+        label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET request.uri
+    critical:
+      operator: "above"
+      threshold: 3
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "above"
+      threshold: 1
+      threshold_duration: 300
+      threshold_occurrences: "all"
+  anomaly_throughput:
+    enabled: true
+    type: "baseline"
+    name: "Anomaly Throughput"
+    description: "Anomaly throughput"
+    runbook_url: null
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    baseline_direction: "upper_only"
+    query: |
+      SELECT
+        rate(count(apm.service.transaction.duration), 1 minute) as 'Web throughput'
+      FROM Metric
+      WHERE 
+        transactionType='Web'
+        AND label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET request.uri
+    critical:
+      operator: "above"
+      threshold: 5
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "above"
+      threshold: 3
+      threshold_duration: 300
+      threshold_occurrences: "all"
+  

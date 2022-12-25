@@ -1,0 +1,12 @@
+unit: ""
+warning: null
+slide_by: null
+fill_value: null
+fill_option: null
+aggregation_timer: null
+aggregation_delay: null
+aggregation_method: null
+baseline_direction: null
+expiration_duration: null
+open_violation_on_expiration: null
+close_violations_on_expiration: null

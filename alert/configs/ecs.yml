@@ -1,0 +1,63 @@
+ecs:
+  ecs_high_cpu:
+    enabled: true
+    unit: "%"
+    type: "static"
+    name: "High CPU Utilization Percentage"
+    description: "High CPU utilization percentage"
+    runbook_url: null
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT 
+        average(`provider.cpuUtilization.Average`)
+      FROM ComputeSample 
+      WHERE 
+        provider='EcsService'
+        AND label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "above"
+      threshold: 70
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "above"
+      threshold: 50
+      threshold_duration: 300
+      threshold_occurrences: "all"
+  ecs_high_memory:
+    enabled: true
+    unit: "%"
+    type: "static"
+    name: "High Memory Utilization Percentage"
+    description: "High memory utilization percentage"
+    runbook_url: null
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT 
+        average(`provider.MemoryUtilization.Average`)
+      FROM ComputeSample 
+      WHERE 
+        provider='EcsService'
+        AND label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "above"
+      threshold: 70
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "above"
+      threshold: 50
+      threshold_duration: 300
+      threshold_occurrences: "all"

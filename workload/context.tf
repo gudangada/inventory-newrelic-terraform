@@ -7,41 +7,15 @@ module "this" {
   product_domain = var.product_domain
   environment    = var.environment
   name_key_case  = var.name_key_case
+  service_name   = var.service_name
+  service_tags   = var.service_tags
 
   context = var.context
 }
 
-variable "context" {
-  type = any
-  default = {
-    enabled        = null
-    account_id     = null
-    api_key        = null
-    product_domain = null
-    environment    = null
-    name_key_case  = null
-  }
-  description = <<-EOT
-    Single object for setting entire context at once.
-    See description of individual variables for details.
-    Leave string and numeric variables as `null` to use default value.
-    Individual variable settings (non-null) override settings in context object.
-  EOT
-
-  validation {
-    condition     = lookup(var.context, "name_key_case", null) == null ? true : contains(["lower", "title", "upper"], var.context["name_key_case"])
-    error_message = "Allowed values: `lower`, `title`, `upper`."
-  }
-
-  validation {
-    condition     = lookup(var.context, "environment", null) == null ? true : contains(["production", "staging", "development"], var.context["environment"])
-    error_message = "Allowed values: `production`, `staging`, `development`"
-  }
-}
-
 variable "enabled" {
   type        = bool
-  default     = null
+  default     = true
   description = "Boolean flag to enable or disable specific module."
 }
 
@@ -61,6 +35,18 @@ variable "product_domain" {
   type        = string
   default     = null
   description = "ProductDomain on AWS."
+}
+
+variable "service_name" {
+  type        = string
+  default     = null
+  description = "Name of the service."
+}
+
+variable "service_tags" {
+  type        = list(string)
+  default     = null
+  description = "The service tag in New Relic. Usually marked as `Label.Service`."
 }
 
 variable "environment" {
@@ -86,5 +72,35 @@ variable "name_key_case" {
   validation {
     condition     = var.name_key_case == null ? true : contains(["lower", "title", "upper"], var.name_key_case)
     error_message = "Allowed values: `lower`, `title`, `upper`."
+  }
+}
+
+variable "context" {
+  type = any
+  default = {
+    enabled        = null
+    account_id     = null
+    api_key        = null
+    product_domain = null
+    environment    = null
+    name_key_case  = null
+    service_tags   = null
+    service_name   = null
+  }
+  description = <<-EOT
+    Single object for setting entire context at once.
+    See description of individual variables for details.
+    Leave string and numeric variables as `null` to use default value.
+    Individual variable settings (non-null) override settings in context object.
+  EOT
+
+  validation {
+    condition     = lookup(var.context, "name_key_case", null) == null ? true : contains(["lower", "title", "upper"], var.context["name_key_case"])
+    error_message = "Allowed values: `lower`, `title`, `upper`."
+  }
+
+  validation {
+    condition     = lookup(var.context, "environment", null) == null ? true : contains(["production", "staging", "development"], var.context["environment"])
+    error_message = "Allowed values: `production`, `staging`, `development`"
   }
 }

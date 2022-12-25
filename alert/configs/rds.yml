@@ -1,0 +1,190 @@
+rds:
+  high_active_connection:
+    enabled: true
+    type: "static"
+    name: "High Active Connection"
+    description: "High active connection"
+    runbook_url: null
+    value_function: "single_value"
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT
+        average(`aws.rds.DatabaseConnections`)
+      FROM Metric
+      WHERE
+        label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "above"
+      threshold: 50
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "above"
+      threshold: 30
+      threshold_duration: 300
+      threshold_occurrences: "all"
+  high_cpu_utilization:
+    enabled: true
+    unit: "%"
+    type: "static"
+    name: "High CPU Utilization Percentage"
+    description: "High CPU utilization percentage"
+    runbook_url: null
+    value_function: "single_value"
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT
+        average(`aws.rds.CPUUtilization`)
+      FROM Metric
+      WHERE
+        label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "above"
+      threshold: 70
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "above"
+      threshold: 50
+      threshold_duration: 300
+      threshold_occurrences: "all"
+  low_free_memory:
+    enabled: true
+    unit: "GB"
+    type: "static"
+    name: "Low Free Memory (GB)"
+    description: "Low free memory (GB)"
+    runbook_url: null
+    value_function: "single_value"
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT
+        average(`provider.freeableMemoryBytes.Average`)/1024/1024/1024 AS 'Free Memory (GB)'
+      FROM DatastoreSample
+      WHERE 
+        provider='RdsDbInstance'
+        AND label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "below"
+      threshold: 0.5
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "below"
+      threshold: 0.3
+      threshold_duration: 300
+      threshold_occurrences: "all"
+  low_free_storage:
+    enabled: true
+    unit: "GB"
+    type: "static"
+    name: "Low Free Storage (GB)"
+    description: "Low free storage (GB)"
+    runbook_url: null
+    value_function: "single_value"
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT
+        average(`provider.freeStorageSpaceBytes.Average`)/1024/1024/1024 AS 'Free Storage (GB)'
+      FROM DatastoreSample
+      WHERE 
+        provider='RdsDbInstance'
+        AND label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "below"
+      threshold: 10
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "below"
+      threshold: 20
+      threshold_duration: 300
+      threshold_occurrences: "all"
+  high_oldest_replication_slot:
+    enabled: true
+    unit: "GB"
+    type: "static"
+    name: "High Average Oldest Replication Slot (GB)"
+    description: "Average oldest replication slot (GB)"
+    runbook_url: null
+    value_function: "single_value"
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT
+        average(`provider.oldestReplicationSlotLag.Average`)/1024/1024/1024 AS 'Oldest Replication Slot Lag (GB)'
+      FROM DatastoreSample
+      WHERE 
+        provider='RdsDbInstance'
+        AND label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "above"
+      threshold: 3
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning:
+      operator: "above"
+      threshold: 1
+      threshold_duration: 300
+      threshold_occurrences: "all"
+  high_transaction_log_disk_usage:
+    enabled: true
+    unit: "GB"
+    type: "static"
+    name: "High Transaction Log Disk Usage (GB)"
+    description: "Transaction log disk usage (GB)"
+    runbook_url: null
+    value_function: "single_value"
+    aggregation_delay: 60
+    aggregation_window: 60
+    aggregation_method: "event_flow"
+    violation_time_limit_seconds: 3600
+    query: |
+      SELECT
+        average(`provider.transactionLogsDiskUsage.Average`)/1024/1024/1024 AS 'Transaction Log Disk Usage (GB)'
+      FROM DatastoreSample
+      WHERE 
+        provider='RdsDbInstance'
+        AND label.ProductDomain='${product_domain}'
+        AND label.Environment='${environment}'
+        AND label.Service IN ${service}
+      FACET label.Name
+    critical:
+      operator: "above"
+      threshold: 3
+      threshold_duration: 300
+      threshold_occurrences: "all"
+    warning: null
+      operator: "above"
+      threshold: 2
+      threshold_duration: 300
+      threshold_occurrences: "all"

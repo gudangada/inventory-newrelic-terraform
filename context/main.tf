@@ -13,11 +13,15 @@ locals {
     product_domain = var.product_domain == null ? var.context.product_domain : var.product_domain
     environment    = var.environment == null ? var.context.environment : var.environment
     name_key_case  = var.name_key_case == null ? var.context.name_key_case : var.name_key_case
+    service_name   = var.service_name == null ? var.context.service_name : var.service_name
+    service_tags   = var.service_tags == null ? var.context.service_tags : var.service_tags
   }
 
   api_key        = local.input.api_key
   account_id     = local.input.account_id
   product_domain = local.input.product_domain
+  service_name   = local.input.service_name
+  service_tags   = local.input.service_tags
   enabled        = local.input.enabled == null ? local.default.enabled : local.input.enabled
   environment    = local.input.environment == null ? local.default.environment : local.input.enviroment
   name_key_case  = local.input.name_key_case == null ? local.default.name_key_case : local.input.name_key_case

@@ -1,7 +1,7 @@
 resource "newrelic_workload" "this" {
   count = local.count
 
-  name              = local.name
+  name              = local.normalized_service_name
   account_id        = local.account_id
   scope_account_ids = [local.account_id]
 
