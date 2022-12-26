@@ -23,7 +23,7 @@ locals {
   service_name   = local.input.service_name
   service_tags   = local.input.service_tags
   enabled        = local.input.enabled == null ? local.default.enabled : local.input.enabled
-  environment    = local.input.environment == null ? local.default.environment : local.input.enviroment
+  environment    = local.input.environment == null ? local.default.environment : local.input.environment
   name_key_case  = local.input.name_key_case == null ? local.default.name_key_case : local.input.name_key_case
 
   default_environment_alias = {
