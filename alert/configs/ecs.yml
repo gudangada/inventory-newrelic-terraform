@@ -5,18 +5,16 @@ ecs:
     type: "static"
     name: "High CPU Utilization Percentage"
     description: "High CPU utilization percentage"
-    runbook_url: null
     aggregation_delay: 60
     aggregation_window: 60
     aggregation_method: "event_flow"
     violation_time_limit_seconds: 3600
     query: |
-      SELECT 
-        average(`provider.cpuUtilization.Average`)
-      FROM ComputeSample 
+      SELECT
+        average(`aws.ecs.CPUUtilization.byService`)
+      FROM Metric 
       WHERE 
-        provider='EcsService'
-        AND label.ProductDomain='${product_domain}'
+        label.ProductDomain='${product_domain}'
         AND label.Environment='${environment}'
         AND label.Service IN ${service}
       FACET label.Name
@@ -36,18 +34,16 @@ ecs:
     type: "static"
     name: "High Memory Utilization Percentage"
     description: "High memory utilization percentage"
-    runbook_url: null
     aggregation_delay: 60
     aggregation_window: 60
     aggregation_method: "event_flow"
     violation_time_limit_seconds: 3600
     query: |
-      SELECT 
-        average(`provider.MemoryUtilization.Average`)
-      FROM ComputeSample 
+      SELECT
+       average(`aws.ecs.MemoryUtilization.byService`)
+      FROM Metric
       WHERE 
-        provider='EcsService'
-        AND label.ProductDomain='${product_domain}'
+        label.ProductDomain='${product_domain}'
         AND label.Environment='${environment}'
         AND label.Service IN ${service}
       FACET label.Name

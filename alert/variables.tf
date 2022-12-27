@@ -1,9 +1,3 @@
-variable "newrelic_alert_policy_id" {
-  type        = string
-  default     = null
-  description = "To use existing alert policy. If value isn't specified a new alert policy will be created."
-}
-
 variable "incident_preference" {
   type        = string
   default     = "PER_CONDITION"
@@ -15,9 +9,9 @@ variable "incident_preference" {
   }
 }
 
-variable "newrelic_notification_channel_id" {
+variable "runbook_url" {
   type        = string
-  description = "New relic notification channel id."
+  description = "Runbook document to attach to alert condition."
 }
 
 variable "config" {
@@ -82,6 +76,16 @@ variable "config" {
         custom_config = null
       }
     )
+    apm = optional(
+      object({
+        enabled       = bool
+        custom_config = optional(string, null)
+      }),
+      {
+        enabled       = false,
+        custom_config = null
+      }
+    )
   })
 
   description = <<-EOT
@@ -93,4 +97,14 @@ variable "config" {
       }
     You can get the yaml template from github.
   EOT
+}
+
+variable "slack_webhook" {
+  type = object({
+    url             = string
+    channel_name    = string
+    webhook_payload = optional(string, null)
+    notified        = string
+  })
+  description = "Slack webhook config."
 }

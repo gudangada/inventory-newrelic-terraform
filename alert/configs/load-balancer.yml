@@ -5,7 +5,6 @@ load_balancer:
     type: "static"
     name: "5XX Error Percentage"
     description: "5XX error percentage"
-    runbook_url: null
     value_function: "single_value"
     aggregation_delay: 60
     aggregation_window: 60
@@ -37,7 +36,6 @@ load_balancer:
     type: "static"
     name: "4XX Error Percentage"
     description: "4XX error percentage"
-    runbook_url: null
     value_function: "single_value"
     aggregation_delay: 60
     aggregation_window: 60

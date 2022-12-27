@@ -5,20 +5,19 @@ apm:
     type: "static"
     name: "High P99 Transaction Time"
     description: "P99 transaction time"
-    runbook_url: null
     aggregation_delay: 60
     aggregation_window: 60
     aggregation_method: "event_flow"
     violation_time_limit_seconds: 3600
     query: |
       SELECT
-        percentile(duration,99) AS '99th Percentile Transaction Time (s)'
+        percentile(duration,99)
       FROM Transaction
       WHERE 
-        label.ProductDomain='${product_domain}'
-        AND label.Environment='${environment}'
-        AND label.Service IN ${service}
-      FACET request.uri
+        tags.label.ProductDomain='${product_domain}'
+        AND tags.label.Environment='${environment}'
+        AND tags.label.Service IN ${service}
+      FACET capture(name, r'.*:(?P<Name>.*)')
     critical:
       operator: "above"
       threshold: 3
@@ -34,7 +33,6 @@ apm:
     type: "baseline"
     name: "Anomaly Throughput"
     description: "Anomaly throughput"
-    runbook_url: null
     aggregation_delay: 60
     aggregation_window: 60
     aggregation_method: "event_flow"
@@ -42,14 +40,13 @@ apm:
     baseline_direction: "upper_only"
     query: |
       SELECT
-        rate(count(apm.service.transaction.duration), 1 minute) as 'Web throughput'
-      FROM Metric
-      WHERE 
-        transactionType='Web'
-        AND label.ProductDomain='${product_domain}'
-        AND label.Environment='${environment}'
-        AND label.Service IN ${service}
-      FACET request.uri
+        rate(count(*), 1 minute)
+      FROM Transaction
+      WHERE
+        tags.label.ProductDomain='${product_domain}'
+        AND tags.label.Environment='${environment}'
+        AND tags.label.Service IN ${service}
+      FACET capture(name, r'.*:(?P<Name>.*)')
     critical:
       operator: "above"
       threshold: 5
@@ -60,4 +57,3 @@ apm:
       threshold: 3
       threshold_duration: 300
       threshold_occurrences: "all"
-  

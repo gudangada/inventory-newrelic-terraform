@@ -1,7 +1,7 @@
 resource "newrelic_alert_policy" "this" {
-  count = local.count == 1 && var.newrelic_alert_policy_id == null ? 1 : 0
+  count = local.count
 
-  name                = local.name
+  name                = local.service_name
   incident_preference = local.incident_preference
 }
 
@@ -9,7 +9,7 @@ resource "newrelic_nrql_alert_condition" "this" {
   for_each = { for config in local.alert_config_list : "${config.group} ${config.name}" => config }
 
   account_id = local.account_id
-  policy_id  = local.newrelic_alert_policy_id
+  policy_id  = join("", newrelic_alert_policy.this.*.id)
   type       = each.value.type
   name       = each.value.name
   # We are facing an issue when getting {{thresholdDuration}} data from newrelic since it always return 0.
@@ -62,7 +62,7 @@ resource "newrelic_nrql_alert_condition" "this" {
 
 resource "newrelic_workflow" "this" {
   count                 = local.count
-  name                  = "Policy: ${local.newrelic_alert_policy_id} - ${local.service_name}"
+  name                  = "Policy: ${join("", newrelic_alert_policy.this.*.id)} - ${local.service_name}"
   muting_rules_handling = "NOTIFY_ALL_ISSUES"
 
   issues_filter {
@@ -72,11 +72,11 @@ resource "newrelic_workflow" "this" {
     predicate {
       attribute = "labels.policyIds"
       operator  = "EXACTLY_MATCHES"
-      values    = [local.newrelic_alert_policy_id]
+      values    = newrelic_alert_policy.this.*.id
     }
   }
 
   destination {
-    channel_id = local.newrelic_notification_channel_id
+    channel_id = join("", newrelic_notification_channel.this.*.id)
   }
 }
