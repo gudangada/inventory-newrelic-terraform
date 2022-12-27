@@ -4,7 +4,6 @@ rds:
     type: "static"
     name: "High Active Connection"
     description: "High active connection"
-    runbook_url: null
     value_function: "single_value"
     aggregation_delay: 60
     aggregation_window: 60
@@ -35,7 +34,6 @@ rds:
     type: "static"
     name: "High CPU Utilization Percentage"
     description: "High CPU utilization percentage"
-    runbook_url: null
     value_function: "single_value"
     aggregation_delay: 60
     aggregation_window: 60
@@ -66,7 +64,6 @@ rds:
     type: "static"
     name: "Low Free Memory (GB)"
     description: "Low free memory (GB)"
-    runbook_url: null
     value_function: "single_value"
     aggregation_delay: 60
     aggregation_window: 60
@@ -89,7 +86,7 @@ rds:
       threshold_occurrences: "all"
     warning:
       operator: "below"
-      threshold: 0.3
+      threshold: 1
       threshold_duration: 300
       threshold_occurrences: "all"
   low_free_storage:
@@ -98,7 +95,6 @@ rds:
     type: "static"
     name: "Low Free Storage (GB)"
     description: "Low free storage (GB)"
-    runbook_url: null
     value_function: "single_value"
     aggregation_delay: 60
     aggregation_window: 60
@@ -130,7 +126,6 @@ rds:
     type: "static"
     name: "High Average Oldest Replication Slot (GB)"
     description: "Average oldest replication slot (GB)"
-    runbook_url: null
     value_function: "single_value"
     aggregation_delay: 60
     aggregation_window: 60
@@ -162,7 +157,6 @@ rds:
     type: "static"
     name: "High Transaction Log Disk Usage (GB)"
     description: "Transaction log disk usage (GB)"
-    runbook_url: null
     value_function: "single_value"
     aggregation_delay: 60
     aggregation_window: 60

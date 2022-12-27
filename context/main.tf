@@ -20,7 +20,6 @@ locals {
   api_key        = local.input.api_key
   account_id     = local.input.account_id
   product_domain = local.input.product_domain
-  service_name   = local.input.service_name
   service_tags   = local.input.service_tags
   enabled        = local.input.enabled == null ? local.default.enabled : local.input.enabled
   environment    = local.input.environment == null ? local.default.environment : local.input.environment
@@ -39,4 +38,11 @@ locals {
     "upper" = "${upper(local.product_domain)} ${upper(local.environment)}"
   }
   name = local.name_map[local.name_key_case]
+
+  service_name_map = {
+    "title" = "${title(local.input.service_name)} ${title(local.environment)}"
+    "lower" = "${lower(local.input.service_name)} ${lower(local.environment)}"
+    "upper" = "${upper(local.input.service_name)} ${upper(local.environment)}"
+  }
+  service_name = local.service_name_map[local.name_key_case]
 }

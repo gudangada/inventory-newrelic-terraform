@@ -3,9 +3,8 @@ lambda:
     enabled: true
     unit: "%"
     type: "static"
-    name: "High Error Rate"
-    description: "High error rate"
-    runbook_url: null
+    name: "Lambda High Error Rate"
+    description: "Lambda high error rate"
     aggregation_delay: 60
     aggregation_window: 60
     aggregation_method: "event_flow"
@@ -36,7 +35,6 @@ lambda:
     type: "baseline"
     name: "Anomaly Lambda Duration"
     description: "Anomaly lambda duration"
-    runbook_url: null
     aggregation_delay: 60
     aggregation_window: 60
     aggregation_method: "event_flow"
@@ -68,7 +66,6 @@ lambda:
     type: "baseline"
     name: "Anomaly Lambda Invocation"
     description: "Anomaly lambda invocation"
-    runbook_url: null
     aggregation_delay: 60
     aggregation_window: 60
     aggregation_method: "event_flow"
@@ -99,8 +96,7 @@ lambda:
     enabled: true
     type: "baseline"
     name: "Anomaly Lambda Concurrent Executions"
-    description: "Anomaly concurrent executions"
-    runbook_url: null
+    description: "Anomaly lambda concurrent executions"
     aggregation_delay: 60
     aggregation_window: 60
     aggregation_method: "event_flow"

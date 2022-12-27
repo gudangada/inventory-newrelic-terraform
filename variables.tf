@@ -13,24 +13,10 @@ variable "workload_config" {
   }
 }
 
-variable "slack_webhook" {
-  type = object({
-    enabled         = optional(bool, false)
-    url             = string
-    channel_name    = string
-    webhook_payload = optional(string, null)
-    notified        = string
-  })
-  description = "Slack webhook config."
-}
-
-
 variable "alert_config" {
   type = object({
-    enabled                          = optional(bool, false)
-    incident_preference              = optional(string, "PER_POLICY")
-    newrelic_alert_policy_id         = optional(string, null)
-    newrelic_notification_channel_id = string
+    enabled             = optional(bool, false)
+    incident_preference = optional(string, "PER_POLICY")
     config = object({
       lb = optional(
         object({
@@ -92,14 +78,22 @@ variable "alert_config" {
           custom_config = null
         }
       )
+      apm = optional(
+        object({
+          enabled       = bool
+          custom_config = optional(string, null)
+        }),
+        {
+          enabled       = false,
+          custom_config = null
+        }
+      )
     })
   })
 
   default = {
-    config                           = {}
-    incident_preference              = "PER_POLICY"
-    newrelic_alert_policy_id         = null
-    newrelic_notification_channel_id = null
+    config              = {}
+    incident_preference = "PER_POLICY"
   }
 
   description = <<-EOT

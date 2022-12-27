@@ -44,7 +44,7 @@ output "normalized_name" {
 }
 
 output "normalized_service_name" {
-  value       = "${local.service_name} ${local.environment}"
+  value       = local.service_name
   description = "Generated service_name for new relic resource."
 }
 

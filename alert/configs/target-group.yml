@@ -4,7 +4,6 @@ target_group:
     type: "static"
     name: "Low Healthy Host Count"
     description: "Healthy host count"
-    runbook_url: null
     value_function: "single_value"
     aggregation_delay: 60
     aggregation_window: 60

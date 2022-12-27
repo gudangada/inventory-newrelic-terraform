@@ -5,7 +5,6 @@ ec2:
     type: "static"
     name: "High CPU Utilization Percentage"
     description: "High CPU utilization percentage"
-    runbook_url: null
     value_function: "single_value"
     aggregation_delay: 60
     aggregation_window: 60
@@ -36,7 +35,6 @@ ec2:
     type: "static"
     name: "High Memory Utilization Percentage"
     description: "High memory utilization percentage"
-    runbook_url: null
     value_function: "single_value"
     aggregation_delay: 60
     aggregation_window: 60
@@ -67,7 +65,7 @@ ec2:
     type: "static"
     name: "High Storage Utilization Percentage"
     description: "High storage utilization percentage"
-    runbook_url: null
+
     value_function: "single_value"
     aggregation_delay: 60
     aggregation_window: 60
